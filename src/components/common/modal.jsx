@@ -32,20 +32,27 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
 
   useEffect(() => {
     if (isOpen) {
-      previousActiveElement.current = document.activeElement;
       document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, handleKeyDown]);
+
+  useEffect(() => {
+    if (isOpen) {
+      previousActiveElement.current = document.activeElement;
       // Focus the modal container
       modalRef.current?.focus();
     }
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
       // Return focus to the trigger element
       if (previousActiveElement.current && isOpen) {
         previousActiveElement.current.focus();
       }
     };
-  }, [isOpen, handleKeyDown]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
