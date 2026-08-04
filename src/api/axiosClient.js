@@ -19,4 +19,15 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Interceptor response untuk mengekstrak data dari struktur { data: ... }
+axiosClient.interceptors.response.use(
+  (response) => {
+    if (response.data && response.data.data !== undefined) {
+      response.data = response.data.data;
+    }
+    return response;
+  },
+  (error) => Promise.reject(error)
+);
+
 export default axiosClient;

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 export const DashboardLayout = () => {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -24,8 +25,16 @@ export const DashboardLayout = () => {
       <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary-200/40 rounded-full blur-3xl"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-200/40 rounded-full blur-3xl"></div>
       
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-800/40 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+      
       {/* Sidebar */}
-      <aside className="w-72 glass-panel border-r border-white/60 hidden md:flex flex-col z-10 m-4 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/50">
+      <aside className={`w-72 glass-panel border-r border-white/60 flex flex-col z-50 m-4 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/50 fixed inset-y-0 left-0 transform transition-transform duration-300 md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-[150%]'}`}>
         <div className="p-8 border-b border-white/40 bg-white/30 backdrop-blur-md">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-400 text-white flex items-center justify-center shadow-lg shadow-primary-500/30">
@@ -39,23 +48,23 @@ export const DashboardLayout = () => {
           </div>
         </div>
         <nav className="flex-1 p-5 space-y-2 overflow-y-auto">
-          <NavLink to="/dashboard" className={navItemClass}>
+          <NavLink to="/dashboard" className={navItemClass} onClick={() => setIsMobileMenuOpen(false)}>
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
              Dashboard
           </NavLink>
-          <NavLink to="/projects" className={navItemClass}>
+          <NavLink to="/projects" className={navItemClass} onClick={() => setIsMobileMenuOpen(false)}>
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>
              Projects
           </NavLink>
-          <NavLink to="/tasks" className={navItemClass}>
+          <NavLink to="/tasks" className={navItemClass} onClick={() => setIsMobileMenuOpen(false)}>
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
              Tasks
           </NavLink>
-          <NavLink to="/users" className={navItemClass}>
+          <NavLink to="/users" className={navItemClass} onClick={() => setIsMobileMenuOpen(false)}>
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
              Users
           </NavLink>
-          <NavLink to="/comments" className={navItemClass}>
+          <NavLink to="/comments" className={navItemClass} onClick={() => setIsMobileMenuOpen(false)}>
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
              Comments
           </NavLink>
@@ -75,9 +84,9 @@ export const DashboardLayout = () => {
       <div className="flex-1 flex flex-col z-10 min-w-0">
         <header className="h-20 bg-white/60 backdrop-blur-xl border-b border-white/60 flex items-center justify-between px-8 md:mx-6 md:mt-4 rounded-t-3xl md:rounded-3xl shadow-sm md:mb-4">
           <div className="flex items-center gap-3">
-             <div className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary-600 md:hidden">
+             <button onClick={() => setIsMobileMenuOpen(true)} className="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center text-primary-600 md:hidden">
                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-             </div>
+             </button>
              <span className="font-extrabold text-xl text-slate-800">Workspace</span>
           </div>
           <button

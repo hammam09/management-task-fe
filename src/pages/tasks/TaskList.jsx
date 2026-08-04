@@ -128,9 +128,9 @@ export const TaskList = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Manajemen Tugas</h1>
-        <Button onClick={handleOpenAddModal}>Tambah Tugas</Button>
+        <Button onClick={handleOpenAddModal} className="w-full sm:w-auto">Tambah Tugas</Button>
       </div>
 
       <DataTable columns={columns} data={tasks} onEdit={handleOpenEditModal} onDelete={handleDelete} />
